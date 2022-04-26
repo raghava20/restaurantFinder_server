@@ -8,7 +8,6 @@ export const getAllRestaurants = async (req: Request, res: Response) => {
       `SELECT * FROM restaurants LEFT JOIN (SELECT restaurant_id, COUNT(*), TRUNC(AVG(rating),1) as avg_rating
        FROM reviews GROUP BY restaurant_id) reviews ON restaurants.id = reviews.restaurant_id`
     );
-    console.log(results);
     res.json({
       results: results.rows.length,
       data: results.rows,
@@ -31,7 +30,6 @@ export const getOneRestaurant = async (req: Request, res: Response) => {
       "SELECT * FROM reviews WHERE restaurant_id = $1",
       [restaurantid]
     );
-    console.log(reviews);
     res.json({ restaurant: restaurant.rows[0], review: reviews.rows });
   } catch (err) {
     console.log(err);
@@ -68,7 +66,6 @@ export const updateOneRestaurant = async (req: Request, res: Response) => {
 
 export const deleteOneRestaurant = async (req: Request, res: Response) => {
   const { restaurantid } = req.params;
-  console.log(restaurantid);
   try {
     const results = await db.query("DELETE FROM restaurants WHERE id = $1", [
       restaurantid,
